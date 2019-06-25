@@ -1,7 +1,7 @@
 import requests
 import json
 from pathlib import Path
-import beautifullsoup4
+import beautifulsoup4
 
 
 
@@ -22,8 +22,8 @@ for i in data:
 
 def get_abstract(url):
     data = requests.get(url)
-    soup = beautifullsoup4(data.text, parser)
-    for p in soup.find_all('<p>')
+    soup = beautifulsoup4(data.text, parser)
+    for p in soup.find_all('p'):
         print(p)
 
 get_abstract('https://www.ncbi.nlm.nih.gov/pubmed/12239580')
