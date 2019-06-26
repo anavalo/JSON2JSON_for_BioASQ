@@ -1,29 +1,40 @@
 import requests
 import json
 from pathlib import Path
-import beautifulsoup4
-
-
-
-
-with open(Path('data', 'trainining7b.json')) as jsonf:
-    data = json.load(jsonf)['questions']
-
-
-
-paragraphs = []
-dictionary = {'context':'', 'qas': [{'question':'', 'id': ''}]}
-
-for i in data:
-    if i['type'] == 'factoid':
-        dictionary['context'] = i['body']
-
-    paragraphs.append(dictionary)
+from bs4 import BeautifulSoup as bs
+import time
 
 def get_abstract(url):
     data = requests.get(url)
-    soup = beautifulsoup4(data.text, parser)
-    for p in soup.find_all('p'):
-        print(p)
+    soup = bs(data.text, 'html.parser')
+    text = [p.text for p in soup.find_all('p')]
+    return text[9]
 
-get_abstract('https://www.ncbi.nlm.nih.gov/pubmed/12239580')
+with open(Path('data', 'trainining7b.json')) as jsonf:
+    seven_b_data = json.load(jsonf)['questions']
+
+paragraphs = []
+
+idx = []
+for i, j in enumerate(seven_b_data):
+    if j['type'] == 'factoid':
+        idx.append(i)
+
+for index in idx:
+    for url in seven_b_data[index]['documents']:
+        dict = {'context': get_abstract(url), 'qas': [{'question': seven_b_data[index]['body'], 'id': seven_b_data[index]['id']}]}
+        print(dict)
+        time.sleep(0.20)
+
+
+
+
+
+
+
+
+
+
+
+
+
