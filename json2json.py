@@ -21,10 +21,12 @@ for i, j in enumerate(seven_b_data):
         idx.append(i)
 
 for index in idx:
+    counter = 000
     for url in seven_b_data[index]['documents']:
-        dict = {'context': get_abstract(url), 'qas': [{'question': seven_b_data[index]['body'], 'id': seven_b_data[index]['id']}]}
+        dict = {'context': get_abstract(url), 'qas': [{'question': seven_b_data[index]['body'], 'id': (seven_b_data[index]['id']+'_'+str(counter))}]}
         print(dict)
-        time.sleep(0.20)
+        counter += 001
+        time.sleep(0.30)
 
 
 
