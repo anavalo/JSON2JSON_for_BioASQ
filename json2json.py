@@ -22,14 +22,17 @@ for i, j in enumerate(seven_b_data):
     if j['type'] == 'factoid':
         idx.append(i)
 
+idx_counter = 0
+
 for index in idx:
+    idx_counter+=1
+    print(idx_counter)
     counter = 0
     for url in seven_b_data[index]['documents']:
         dict = {'context': get_abstract(url),
                 'qas': [{'question': seven_b_data[index]['body'],
                          'id': (seven_b_data[index]['id']+'_'+str("%03d" % counter))}]}
         paragraphs.append(dict)
-        print(counter)
         counter += 1
         time.sleep(0.20)
 
