@@ -16,7 +16,7 @@ with open(Path('data', 'trainining7b.json')) as jsonf:
 
 paragraphs = []
 
-#find the "factoid" indexes of training7b.json
+# find the "factoid" indexes of training7b.json
 idx = []
 for i, j in enumerate(seven_b_data):
     if j['type'] == 'factoid':
@@ -29,10 +29,16 @@ for index in idx:
                 'qas': [{'question': seven_b_data[index]['body'],
                          'id': (seven_b_data[index]['id']+'_'+str("%03d" % counter))}]}
         paragraphs.append(dict)
+        print(counter)
         counter += 1
-        time.sleep(0.30)
+        time.sleep(0.20)
 
-training7b
+training7b = {'version': 'BioASQ7b', 'data': [{'title':'BioASQ7b'}]}
+training7b['data'][0]['paragraphs'] = paragraphs
+
+with open(Path('data', 'BioASQ-test-7b'), 'w') as f:
+    json.dump(training7b, f, indent=2)
+
 
 
 
