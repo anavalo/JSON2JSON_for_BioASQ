@@ -1,10 +1,9 @@
 import requests
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
+from urllib3.util import Retry
 import json
 from pathlib import Path
 from bs4 import BeautifulSoup as bs
-import time
 
 #function for retrieving abstracts from pubmed
 def get_abstract(url):
@@ -14,10 +13,10 @@ def get_abstract(url):
     session.mount('http://', adapter)
     session.mount('https://', adapter)
     data = session.get(url)
-    # data = requests.get(url)
     soup = bs(data.text, 'html.parser')
-    text = [p.text for p in soup.find_all('p')]
-    return text[9]
+    text = [p.text for p in soup.find_all('div', attrs={'class':'abstr'})]
+    final = text[0].replace('Abstract', '')
+    return final
 
 with open(Path('data', 'trainining7b.json')) as jsonf:
     seven_b_data = json.load(jsonf)['questions']
