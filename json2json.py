@@ -7,16 +7,19 @@ from bs4 import BeautifulSoup as bs
 
 #function for retrieving abstracts from pubmed
 def get_abstract(url):
-    session = requests.Session()
-    retry = Retry(connect=3, backoff_factor=0.5)
-    adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
-    data = session.get(url)
-    soup = bs(data.text, 'html.parser')
-    text = [p.text for p in soup.find_all('div', attrs={'class':'abstr'})]
-    final = text[0].replace('Abstract', '')
-    return final
+    try:
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        data = session.get(url)
+        soup = bs(data.text, 'html.parser')
+        text = [p.text for p in soup.find_all('div', attrs={'class': 'abstr'})]
+        final = text[0].replace('Abstract', '')
+        return final
+    except IndexError:
+        print(url)
 
 with open(Path('data', 'trainining7b.json')) as jsonf:
     seven_b_data = json.load(jsonf)['questions']

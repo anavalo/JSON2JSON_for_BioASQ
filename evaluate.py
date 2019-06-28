@@ -9,17 +9,11 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "file",
-        type=Path,
-        help="Pathlib Path to the training7b.json",
-    )
-    arg = parser.parse_args()
+    parser.add_argument("--file", type=Path, help="Pathlib Path to the training7b.json")
+    args = parser.parse_args()
 
 
-if __name__ == "__main__":
-    main()
-    return_json(arg.file)
+
 
 # function for retrieving abstracts from pubmed
 def get_abstract(url):
@@ -64,3 +58,8 @@ def return_json(file):
 
     with open(Path('data', 'BioASQ-test-7b'), 'w') as f:
         json.dump(training7b, f, indent=2)
+
+
+if __name__ == "__main__":
+    main()
+    return_json(args.file)
