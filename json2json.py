@@ -1,4 +1,6 @@
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 import json
 from pathlib import Path
 from bs4 import BeautifulSoup as bs
@@ -6,7 +8,13 @@ import time
 
 #function for retrieving abstracts from pubmed
 def get_abstract(url):
-    data = requests.get(url)
+    session = requests.Session()
+    retry = Retry(connect=3, backoff_factor=0.5)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    data = session.get(url)
+    # data = requests.get(url)
     soup = bs(data.text, 'html.parser')
     text = [p.text for p in soup.find_all('p')]
     return text[9]
@@ -35,7 +43,7 @@ for index in idx:
         paragraphs.append(dict)
         print(counter)
         counter += 1
-        time.sleep(0.20)
+
 
 training7b = {'version': 'BioASQ7b', 'data': [{'title':'BioASQ7b'}]}
 training7b['data'][0]['paragraphs'] = paragraphs
