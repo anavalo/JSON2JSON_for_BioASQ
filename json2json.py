@@ -33,7 +33,7 @@ idx_counter = 0
 
 for index in idx:
     idx_counter+=1
-    print(str(idx_counter) + ' of 779 factoids')
+    print(str(idx_counter) + ' of ' + str(len(idx)) + ' factoids, ' + str((idx_counter)/len(idx)*100) + ' %')
     counter = 0
     for url in seven_b_data[index]['documents']:
         dict = {'context': get_abstract(url),
